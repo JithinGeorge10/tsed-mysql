@@ -10,6 +10,8 @@
 
     "test:db": "node --import @swc-node/register/esm-register src/test-db.ts",
     "migration:run": "node --import @swc-node/register/esm-register src/migrations/run-migrations.ts",
+    "test": "vitest",
+    "test:run": "vitest run",
 
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
@@ -73,7 +75,8 @@
     "@types/node": "^24.1.0",
     "nodemon": "^3.1.10",
     "tslib": "^2.8.1",
-    "typeorm": "^0.3.25"
+    "typeorm": "^0.3.25",
+    "vitest": "^1.0.4"
   },
   "tsed": {
     "convention": "conv_default",

@@ -1,11 +1,12 @@
-import {Controller} from "@tsed/di";
+import {Controller, Inject} from "@tsed/di";
 import {Post} from "@tsed/schema";
 import {BodyParams} from "@tsed/platform-params";
-import {User} from "../../entities/User.js";
-import {AppDataSource} from "../../config/typeorm.config.js";
+import {UserService} from "../../services/UserService.js";
 
 @Controller("/users")
 export class UserController {
+  constructor(@Inject() private userService: UserService) {}
+  
   @Post("/createUser")
   async createUser(@BodyParams() userData: any) {
     console.log("Received request body:", userData);
@@ -21,24 +22,7 @@ export class UserController {
         };
       }
       
-      // Initialize database connection if not already initialized
-      if (!AppDataSource.isInitialized) {
-        console.log("Initializing database connection...");
-        await AppDataSource.initialize();
-        console.log("Database connection initialized successfully");
-      }
-      
-      const userRepository = AppDataSource.getRepository(User);
-      console.log("User repository obtained");
-      
-      const newUser = new User();
-      newUser.name = userData.name;
-      newUser.age = userData.age;
-      newUser.email = userData.email;
-      newUser.address = userData.address;
-      console.log("New user object created:", newUser);
-      
-      const savedUser = await userRepository.save(newUser);
+      const savedUser = await this.userService.create(userData);
       console.log("User saved successfully:", savedUser);
       
       return {
